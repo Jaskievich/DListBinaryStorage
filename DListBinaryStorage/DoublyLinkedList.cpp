@@ -11,13 +11,15 @@ DoublyLinkedList::~DoublyLinkedList()
 }
 
 
-void DoublyLinkedList::VisitNodes(std::function<void(const std::string& data, int randIndex)> visitor) const
+void DoublyLinkedList::VisitNodes(std::function<void(const std::string& data, int randIndex)> &&visitor) const
 {
     std::unordered_map<ListNode*, int> node_to_index;
+    node_to_index.reserve(count);
     ListNode* current = head;
     int index = 0;
     while (current) {
-        node_to_index[current] = index++;
+      //  node_to_index[current] = index++;
+        node_to_index.emplace(current, index);
         current = current->next;
     }
 
@@ -41,27 +43,66 @@ void DoublyLinkedList::Add(std::vector<std::pair<std::string, int>>& entries)
     DeleteList();
     const size_t n = entries.size();
     std::vector<ListNode*> nodes(n);
-    for (size_t i = 0; i < n; ++i) {
-        nodes[i] = new ListNode();
-        nodes[i]->data = std::move(entries[i].first);
-    }
-    // второй проход дл€ установлени€ rand
-    for (size_t i = 0; i < n; ++i) {
-        if (i > 0) {
-            nodes[i]->prev = nodes[i - 1];
-            nodes[i - 1]->next = nodes[i];
+    try {
+        for (size_t i = 0; i < n; ++i) {
+            nodes[i] = new ListNode();
+            nodes[i]->data = std::move(entries[i].first);
         }
-        int rand_idx = entries[i].second;
-        if (rand_idx >= 0 && rand_idx < static_cast<int>(n)) {
-            nodes[i]->rand = nodes[rand_idx];
+        // второй проход дл€ установлени€ rand
+        for (size_t i = 0; i < n; ++i) {
+            if (i > 0) {
+                nodes[i]->prev = nodes[i - 1];
+                nodes[i - 1]->next = nodes[i];
+            }
+            int rand_idx = entries[i].second;
+            if (rand_idx >= 0 && rand_idx < static_cast<int>(n)) {
+                nodes[i]->rand = nodes[rand_idx];
+            }
         }
+        head = nodes[0];
+        count = n;
     }
-    head = nodes[0];
-    count = n;
+    catch (...) {
+        for (auto node : nodes) delete node;
+        head = nullptr;
+        count = 0;
+        throw;
+    }
 }
+
+//void DoublyLinkedList::Add(std::vector<std::pair<std::string, int>>& entries)
+//{
+//    if (entries.size() == 0) return;
+//    DeleteList();
+//    const size_t n = entries.size();
+//    std::vector<std::unique_ptr<ListNode>> nodes(n);
+//    for (size_t i = 0; i < n; ++i) {
+//        nodes[i] = std::make_unique<ListNode>();
+//        nodes[i]->next = nodes[i]->prev = nullptr;
+//        nodes[i]->data = std::move(entries[i].first);
+//    }
+//    // второй проход дл€ установлени€ rand
+//    for (size_t i = 0; i < n; ++i) {
+//        if (i > 0) {
+//            nodes[i]->prev = nodes[i - 1].get();
+//            nodes[i - 1]->next = nodes[i].get();
+//        }
+//        int rand_idx = entries[i].second;
+//        if (rand_idx >= 0 && rand_idx < static_cast<int>(n)) {
+//            nodes[i]->rand = nodes[rand_idx].get();
+//        }
+//    }
+//    head = nodes[0].release();
+//    // ќстальные unique_ptr должны быть освобождены без delete
+//    for (size_t i = 1; i < n ; ++i) {
+//        nodes[i].release(); // просто тер€ем владение
+//    }
+//    count = n;
+//}
 
 void DoublyLinkedList::DeleteList()
 {
+   
     while (head) {
         ListNode* next = head->next;
         delete head;
@@ -71,7 +112,7 @@ void DoublyLinkedList::DeleteList()
     count = 0;
 }
 
-ListNode* DoublyLinkedList::GetHead() const {
+const ListNode* DoublyLinkedList::GetHead() const {
     return head;
 }
 
@@ -115,7 +156,7 @@ size_t DoublyLinkedList::GetSizeList() const
 
 
 
-    bool ListSerializer::Serialize(DoublyLinkedList& linkedList, const std::string& filename) {
+    bool ListSerializer::Serialize(const DoublyLinkedList& linkedList, const std::string& filename) {
         std::ofstream out(filename, std::ios::binary);
         if (!out) {
             std::cerr << "ќшибка: Ќе могу открыть файл дл€ записи: " << filename << std::endl;

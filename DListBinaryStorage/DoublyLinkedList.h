@@ -18,15 +18,35 @@ class DoublyLinkedList
 {
 public:
 
+    DoublyLinkedList() = default;
+
     ~DoublyLinkedList();
+    // Запрет копирования
+    DoublyLinkedList(const DoublyLinkedList&) = delete;
+    DoublyLinkedList& operator=(const DoublyLinkedList&) = delete;
+
+    // Перемещение
+    DoublyLinkedList(DoublyLinkedList&& other) noexcept
+        : head(std::exchange(other.head, nullptr))
+        , count(std::exchange(other.count, 0)) {
+    }
+
+    DoublyLinkedList& operator=(DoublyLinkedList&& other) noexcept {
+        if (this != &other) {
+            DeleteList();
+            head = std::exchange(other.head, nullptr);
+            count = std::exchange(other.count, 0);
+        }
+        return *this;
+    }
  
-    void VisitNodes(std::function<void(const std::string& data, int randIndex)> visitor) const;
+    void VisitNodes(std::function<void(const std::string& data, int randIndex)> &&visitor) const;
    
     void Add(std::vector<std::pair<std::string, int>>& entries);
  
     void DeleteList();
   
-    ListNode* GetHead() const;
+    const ListNode* GetHead() const;
 
     size_t GetSizeList() const;
   
@@ -46,7 +66,7 @@ private:
 
 public:
 
-    bool Serialize(DoublyLinkedList& linkedList, const std::string& filename);
+    bool Serialize(const DoublyLinkedList& linkedList, const std::string& filename);
 
     bool Deserialize(DoublyLinkedList& linkedList, const std::string& filename);
 };

@@ -9,39 +9,6 @@
 
 #include "DoublyLinkedList.h"
 
-// дл€ прверки
-//void PrintList( ListNode* head)
-//{
-//    ListNode* current = head;
-//    int idx = 0;
-//    while (current) {
-//        std::cout << "Node " << idx << ": data=\"" << current->data
-//            << "\", prev=" << (current->prev ? "yes" : "null")
-//            << ", next=" << (current->next ? "yes" : "null")
-//            << ", rand=";
-//
-//        if (current->rand) {
-//            // »щем индекс rand узла
-//            ListNode* temp = head;
-//            int rand_idx = 0;
-//            while (temp && temp != current->rand) {
-//                temp = temp->next;
-//                rand_idx++;
-//            }
-//            if( temp )
-//                std::cout << rand_idx <<" - "<< temp->data;
-//            else std::cout << rand_idx ;
-//        }
-//        else {
-//            std::cout << "null";
-//        }
-//        std::cout << std::endl;
-//
-//        current = current->next;
-//        idx++;
-//    }
-//}
-
 static void PrintList(DoublyLinkedList  & linkedList)
 {
     int index = 0;
