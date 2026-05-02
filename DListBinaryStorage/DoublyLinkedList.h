@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <vector>
 #include <unordered_map>
 #include <string>
@@ -21,11 +21,11 @@ public:
     DoublyLinkedList() = default;
 
     ~DoublyLinkedList();
-    // Запрет копирования
+    // Р—Р°РїСЂРµС‚ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
     DoublyLinkedList(const DoublyLinkedList&) = delete;
     DoublyLinkedList& operator=(const DoublyLinkedList&) = delete;
 
-    // Перемещение
+    // РџРµСЂРµРјРµС‰РµРЅРёРµ
     DoublyLinkedList(DoublyLinkedList&& other) noexcept
         : head(std::exchange(other.head, nullptr))
         , count(std::exchange(other.count, 0)) {

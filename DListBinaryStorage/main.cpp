@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <fstream>
 #include <vector>
 
@@ -25,7 +25,7 @@ static void BuildFromTextFile(const std::string& filename, DoublyLinkedList &lis
 {
     std::ifstream in(filename);
     if (!in.is_open()) {
-        std::cerr << "Îøèáêà îòêðûòèÿ ôàéëà " << filename << std::endl;
+        std::cerr << "ÐžÑˆÐ¸Ð±ÐºÐ° Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚Ð¸Ñ Ñ„Ð°Ð¹Ð»Ð° " << filename << std::endl;
         return ;
     }
     std::vector<std::pair<std::string, int>> entries;
@@ -36,7 +36,7 @@ static void BuildFromTextFile(const std::string& filename, DoublyLinkedList &lis
 
         size_t semicolon = line.rfind(';');
         if (semicolon == std::string::npos) {
-            std::cerr << "Íåâåðíûé ôîðìàò" << line << std::endl;
+            std::cerr << "ÐÐµÐ²ÐµÑ€Ð½Ñ‹Ð¹ Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚" << line << std::endl;
             continue;
         }
         std::string data = line.substr(0, semicolon);
@@ -60,7 +60,7 @@ int main() {
     const std::string input_file = "inlet.in";
     const std::string output_file = "outlet.out";
 
-    std::cout << "=== Ñåðèàëèçàöèÿ äâóñâÿçíîãî ñïèñêà ===" << std::endl;
+    std::cout << "=== Ð¡ÐµÑ€Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð´Ð²ÑƒÑÐ²ÑÐ·Ð½Ð¾Ð³Ð¾ ÑÐ¿Ð¸ÑÐºÐ° ===" << std::endl;
     DoublyLinkedList linkedList;
     BuildFromTextFile(input_file, linkedList);
   //  PrintList(linkedList.GetHead());
@@ -70,11 +70,11 @@ int main() {
 
     serializer.Serialize(linkedList, output_file);
 
-    std::cout << "=== Óäàëåíèå ñïèñêà è ïðîâåðêà ===" << std::endl;
+    std::cout << "=== Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ ÑÐ¿Ð¸ÑÐºÐ° Ð¸ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° ===" << std::endl;
     linkedList.DeleteList();
  //   PrintList(linkedList.GetHead());
     PrintList(linkedList);
-    std::cout << "=== Ïðîâåðêà ñåðèàëèçàöèè äâóñâÿçíîãî ñïèñêà ===" << std::endl;
+    std::cout << "=== ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐµÑ€Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ Ð´Ð²ÑƒÑÐ²ÑÐ·Ð½Ð¾Ð³Ð¾ ÑÐ¿Ð¸ÑÐºÐ° ===" << std::endl;
     serializer.Deserialize(linkedList, output_file);
    // PrintList(linkedList.GetHead());
     PrintList(linkedList);

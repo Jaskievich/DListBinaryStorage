@@ -1,4 +1,4 @@
-#include <unordered_map>
+п»ї#include <unordered_map>
 #include <fstream>
 #include <cstdint>
 #include <iostream>
@@ -48,7 +48,7 @@ void DoublyLinkedList::Add(std::vector<std::pair<std::string, int>>& entries)
             nodes[i] = new ListNode();
             nodes[i]->data = std::move(entries[i].first);
         }
-        // второй проход для установления rand
+        // РІС‚РѕСЂРѕР№ РїСЂРѕС…РѕРґ РґР»СЏ СѓСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ rand
         for (size_t i = 0; i < n; ++i) {
             if (i > 0) {
                 nodes[i]->prev = nodes[i - 1];
@@ -81,7 +81,7 @@ void DoublyLinkedList::Add(std::vector<std::pair<std::string, int>>& entries)
 //        nodes[i]->next = nodes[i]->prev = nullptr;
 //        nodes[i]->data = std::move(entries[i].first);
 //    }
-//    // второй проход для установления rand
+//    // РІС‚РѕСЂРѕР№ РїСЂРѕС…РѕРґ РґР»СЏ СѓСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ rand
 //    for (size_t i = 0; i < n; ++i) {
 //        if (i > 0) {
 //            nodes[i]->prev = nodes[i - 1].get();
@@ -93,9 +93,9 @@ void DoublyLinkedList::Add(std::vector<std::pair<std::string, int>>& entries)
 //        }
 //    }
 //    head = nodes[0].release();
-//    // Остальные unique_ptr должны быть освобождены без delete
+//    // РћСЃС‚Р°Р»СЊРЅС‹Рµ unique_ptr РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕСЃРІРѕР±РѕР¶РґРµРЅС‹ Р±РµР· delete
 //    for (size_t i = 1; i < n ; ++i) {
-//        nodes[i].release(); // просто теряем владение
+//        nodes[i].release(); // РїСЂРѕСЃС‚Рѕ С‚РµСЂСЏРµРј РІР»Р°РґРµРЅРёРµ
 //    }
 //    count = n;
 //}
@@ -123,7 +123,7 @@ size_t DoublyLinkedList::GetSizeList() const
 
 // ---- ListSerializer
 
-    // Запись строки в бинарный файл
+    // Р—Р°РїРёСЃСЊ СЃС‚СЂРѕРєРё РІ Р±РёРЅР°СЂРЅС‹Р№ С„Р°Р№Р»
     void ListSerializer::WriteString(std::ofstream& out, const std::string& str) {
         uint32_t len = static_cast<uint32_t>(str.size());
         out.write(reinterpret_cast<const char*>(&len), sizeof(len));
@@ -132,23 +132,23 @@ size_t DoublyLinkedList::GetSizeList() const
         }
     }
 
-    // Чтение строки из бинарного файла
+    // Р§С‚РµРЅРёРµ СЃС‚СЂРѕРєРё РёР· Р±РёРЅР°СЂРЅРѕРіРѕ С„Р°Р№Р»Р°
     std::string ListSerializer::ReadString(std::ifstream& in) {
         uint32_t len;
         in.read(reinterpret_cast<char*>(&len), sizeof(len));
         if (!in) {
-            throw std::runtime_error("Ошибка чтения длины строки");
+            throw std::runtime_error("РћС€РёР±РєР° С‡С‚РµРЅРёСЏ РґР»РёРЅС‹ СЃС‚СЂРѕРєРё");
         }
 
-        if (len > 1000 * 1000) { // защита от некорректных данных (>1MB)
-            throw std::runtime_error("Строка слишком большая");
+        if (len > 1000 * 1000) { // Р·Р°С‰РёС‚Р° РѕС‚ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹С… РґР°РЅРЅС‹С… (>1MB)
+            throw std::runtime_error("РЎС‚СЂРѕРєР° СЃР»РёС€РєРѕРј Р±РѕР»СЊС€Р°СЏ");
         }
 
         std::string str(len, '\0');
         if (len > 0) {
             in.read(&str[0], len);
             if (!in) {
-                throw std::runtime_error("Ошибка чтения строки");
+                throw std::runtime_error("РћС€РёР±РєР° С‡С‚РµРЅРёСЏ СЃС‚СЂРѕРєРё");
             }
         }
         return str;
@@ -159,7 +159,7 @@ size_t DoublyLinkedList::GetSizeList() const
     bool ListSerializer::Serialize(const DoublyLinkedList& linkedList, const std::string& filename) {
         std::ofstream out(filename, std::ios::binary);
         if (!out) {
-            std::cerr << "Ошибка: Не могу открыть файл для записи: " << filename << std::endl;
+            std::cerr << "РћС€РёР±РєР°: РќРµ РјРѕРіСѓ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РґР»СЏ Р·Р°РїРёСЃРё: " << filename << std::endl;
             return false;
         }
         try {
@@ -172,37 +172,37 @@ size_t DoublyLinkedList::GetSizeList() const
                 out.write(reinterpret_cast<const char*>(&idx), sizeof(idx));
                 });
             out.close();
-            std::cout << "Сериализовано " << linkedList.GetSizeList() << " узлов в " << filename << std::endl;
+            std::cout << "РЎРµСЂРёР°Р»РёР·РѕРІР°РЅРѕ " << linkedList.GetSizeList() << " СѓР·Р»РѕРІ РІ " << filename << std::endl;
             return true;
         }
         catch (const std::exception& e) {
-            std::cerr << "Ошибка сериализации: " << e.what() << std::endl;
+            std::cerr << "РћС€РёР±РєР° СЃРµСЂРёР°Р»РёР·Р°С†РёРё: " << e.what() << std::endl;
             out.close();
             return false;
         }
     }
 
-    // Десериализация списка из бинарного файла
+    // Р”РµСЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃРїРёСЃРєР° РёР· Р±РёРЅР°СЂРЅРѕРіРѕ С„Р°Р№Р»Р°
     bool ListSerializer::Deserialize(DoublyLinkedList& linkedList, const std::string& filename) {
         std::ifstream in(filename, std::ios::binary);
         if (!in) {
-            std::cerr << "Ошибка: Не могу открыть файл для чтения: " << filename << std::endl;
+            std::cerr << "РћС€РёР±РєР°: РќРµ РјРѕРіСѓ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РґР»СЏ С‡С‚РµРЅРёСЏ: " << filename << std::endl;
             return false;
         }
 
         try {
-            // Чтение количества узлов
+            // Р§С‚РµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° СѓР·Р»РѕРІ
             uint32_t count;
             in.read(reinterpret_cast<char*>(&count), sizeof(count));
             if (!in) {
-                throw std::runtime_error("Количестов узлов не прочитано");
+                throw std::runtime_error("РљРѕР»РёС‡РµСЃС‚РѕРІ СѓР·Р»РѕРІ РЅРµ РїСЂРѕС‡РёС‚Р°РЅРѕ");
             }
             if (count == 0) {
-                std::cout << "Десериализован пустой срисок из " << filename << std::endl;
+                std::cout << "Р”РµСЃРµСЂРёР°Р»РёР·РѕРІР°РЅ РїСѓСЃС‚РѕР№ СЃСЂРёСЃРѕРє РёР· " << filename << std::endl;
                 return true;
             }
-            if (count > 1000000) { // ограничение из условия задачи
-                throw std::runtime_error(" количестов узлов > 1,000,000");
+            if (count > 1000000) { // РѕРіСЂР°РЅРёС‡РµРЅРёРµ РёР· СѓСЃР»РѕРІРёСЏ Р·Р°РґР°С‡Рё
+                throw std::runtime_error(" РєРѕР»РёС‡РµСЃС‚РѕРІ СѓР·Р»РѕРІ > 1,000,000");
             }
             std::vector<std::pair<std::string, int>> entries;
             entries.reserve(count);
@@ -211,7 +211,7 @@ size_t DoublyLinkedList::GetSizeList() const
                 int32_t rand_idx = -1;
                 in.read(reinterpret_cast<char*>(&rand_idx), sizeof(int32_t));
                 if (!in) {
-                    throw std::runtime_error("Ошибка чтения rand_index " + std::to_string(i));
+                    throw std::runtime_error("РћС€РёР±РєР° С‡С‚РµРЅРёСЏ rand_index " + std::to_string(i));
                 }
                 entries.emplace_back(data, rand_idx);
 
@@ -221,7 +221,7 @@ size_t DoublyLinkedList::GetSizeList() const
 
         }
         catch (const std::exception& e) {
-            std::cerr << "Ошибка десериализации: " << e.what() << std::endl;
+            std::cerr << "РћС€РёР±РєР° РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёРё: " << e.what() << std::endl;
             in.close();
             return false;
         }
